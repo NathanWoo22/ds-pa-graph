@@ -81,6 +81,10 @@ class MSTNode(threading.Thread):
         self.discovery = None  # mode looking for new nodes to connect
         self.test_over = None  # true if no one is remaining to send test message
         self.leader = -1  # to :))
+        self.numMessages = 0
+
+    def getNumMessages(self):
+        return self.numMessages
 
     # starting function of thread initializing program
     def run(self):
@@ -135,6 +139,7 @@ class MSTNode(threading.Thread):
                 conn, addr = s.accept()
                 data = conn.recv(1024)
                 m = Message(**json.loads(data, encoding="utf-8"))
+                self.numMessages = self.numMessages + 1
                 print('{"from": '+ str(m.uid) + ', "to": ' + str(self.uid) + ', "type": "' + str(m.type) +
                       '", "value": ' + str(m.value) + '}')  # +str(self.uid))
                 if m.type == "End":

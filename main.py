@@ -50,14 +50,18 @@ if __name__ == "__main__":
                 uid = node,
                 port = initial_port + node,
                 edges = [edge for edge in edges if edge.src_node==node],
-                timeout = timeout
+                timeout = timeout,
             )
         )
     print("starting values")
+    totalMessages = 0
     start_time = time.time()
     for x in threads:
         x.start()
     for x in threads:
+        totalMessages = totalMessages + x.getNumMessages()
         x.join()
     end_time = time.time()
-    print(end_time - start_time)
+    print(f"Total Messages: {totalMessages}")
+
+    print(f"Total Time: {end_time - start_time}")
